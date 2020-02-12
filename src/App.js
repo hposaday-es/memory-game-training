@@ -3,7 +3,8 @@ import './App.css';
 
 import ImageCard from './components/imageCard/imageCard';
 import Timer from './components/timer/timer';
-import Board from './components/board/board'
+import Board from './components/board/board';
+import StartForm from './components/startForm/startForm';
 
 /* function App() {
 
@@ -23,9 +24,9 @@ class App extends React.Component {
     return (
 
       <div className="App">
-     
-        <Timer/>
-          <Board/>
+        <StartForm/>
+      {/*   <Timer/>
+        <Board/> */}
       </div>
     )
   }

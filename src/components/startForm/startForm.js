@@ -10,8 +10,16 @@ class StartForm extends React.Component {
     render () {
         return (
             <Container>
-                
+                <form>
+                    <TextField 
+                        id='outlined-basic' 
+                        label='nombre' 
+                        variant='outlined' />
+                </form>
+                <Button variant="contained">Hecho</Button>
             </Container>
         )
     }
 }
+
+export default StartForm;
