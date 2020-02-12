@@ -1,0 +1,11 @@
+.cardImage  {
+    height: 100%;
+    width: 100%;
+    padding-top: '56.25%';
+    margin-top:'30';
+}
+
+.cardContainer {
+    height: 100%;
+    width: 100%;
+}
