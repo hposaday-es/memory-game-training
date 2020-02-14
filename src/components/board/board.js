@@ -17,7 +17,8 @@ class Board extends React.Component {
         revealedCards: [],
         cards: [],
         matchedCards: [],
-        clicksLimit: 0
+        clicksLimit: 0,
+        clickedUid: undefined
     }
 
     constructor(props) {
@@ -56,11 +57,13 @@ class Board extends React.Component {
         let cardsArray = [];
         let count = 0;
         for (let i = 0; i < selectedImages.length; i++) {
+            //hacer con Object.assign
             const image = JSON.parse(JSON.stringify(selectedImages[i]))
             //const image =  selectedImages[i]
             image.uid = count
             count++
 
+            //hacer con Object.assign
             const imageDuplicate = JSON.parse(JSON.stringify(selectedImages[i]))
             //const imageDuplicate = selectedImages[i]
             imageDuplicate.uid = count
@@ -72,59 +75,75 @@ class Board extends React.Component {
         const shuffledArr = arrayUtils.arrayShuffler(cardsArray)
         console.log(shuffledArr,"shuffledarray")
         this.setState({
-            cards: cardsArray
+            cards: shuffledArr
         })
     }
 
     imageOnClick = (card) => {
-        let { clicksLimit, matchedCards, revealedCards, } = this.state
+        let { clicksLimit, matchedCards, revealedCards, clickedUid } = this.state
 
+        console.log(clicksLimit)
 
-        if (clicksLimit < 2) {
+        if (card.uid !== clickedUid){
+            const cardSibling = revealedCards.filter(revealedCard => revealedCard.id === card.id && revealedCard.uid !== card.uid )
 
-            if (clicksLimit === 1) {
-                this.setState({
-                    revealedCards: [...this.state.revealedCards, card],
-                    clicksLimit: 0
-                })
+            if (clicksLimit < 2) {
 
-                if (revealedCards.filter(revealedCard => revealedCard.src === card.src).length > 0) {
+                if (clicksLimit === 1) {
+                    
+                    this.setState({
+                        revealedCards: [...this.state.revealedCards, card],
+                        clicksLimit: 2,
+                        clickedUid: card.id
+                    })
 
-                    setTimeout(() => {
-                        this.setState({
-                            matchedCards: [...matchedCards, card, revealedCards[0]],
-                            revealedCards: [],
-                            clicksLimit: 0
-                        })
-                    }, 700)
-                   
+                    if (cardSibling.length > 0 ) {
+                        console.log('paired')
+            
+                        setTimeout(() => {
+                            this.setState({
+                                matchedCards: [...matchedCards, card, revealedCards[0]],
+                                revealedCards: [],
+                               /*  clicksLimit: 0,
+                                clickedUid: undefined */
+                            })
+                        }, 1200)
+                    
+                    } else {
+
+                        setTimeout(() => {
+                            this.setState({
+                                revealedCards: [],
+                                clicksLimit: 0,
+                                clickedUid: undefined
+                            })
+                        }, 1200)
+
+                    }
+
                 } else {
-
-                    setTimeout(() => {
                         this.setState({
-                            revealedCards: [],
-                            clicksLimit: 0
+                            revealedCards: [...this.state.revealedCards, card],
+                            clicksLimit: clicksLimit === 1 ? 0 : clicksLimit += 1,
+                            clickedUid: card.id
                         })
-                    }, 700)
-
                 }
 
             } else {
+                
                 this.setState({
-                    revealedCards: [...this.state.revealedCards, card],
-                    clicksLimit: clicksLimit + 1
+                    revealedCards: [],
+                    clicksLimit: clicksLimit === 1 ? 0 : clicksLimit += 1
                 })
             }
 
+            }
 
-
-        } else {
             this.setState({
-                revealedCards: [],
-                clicksLimit: 0
+                clickedUid: card.uid
             })
-        }
 
+        
     }
 
     render() {
@@ -135,14 +154,16 @@ class Board extends React.Component {
                 <GridList cellHeight={120} className={boardStyles.grid} cols={4}>
                     {this.state.cards.map((card, index) => (
                         <Fade 
+                            key={card.uid}
                             in={true}
                             timeout={1500}
                         >
                         <GridListTile
-                            key={index}
+                            key={card.uid}
                             cols={1}
                         >
                             <ImageCard
+                                key={card.uid}
                                 card={card}
                                 frontSrc={card.src}
                                 onClick={this.imageOnClick}

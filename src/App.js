@@ -4,7 +4,7 @@ import './App.css';
 import ImageCard from './components/imageCard/imageCard';
 import Timer from './components/timer/timer';
 import Board from './components/board/board';
-import StartForm from './components/startForm/startForm';
+import LeaderBoard from './pages/leaderBoard/leaderBoard';
 
 /* function App() {
 
@@ -24,9 +24,11 @@ class App extends React.Component {
     return (
 
       <div className="App">
-        <StartForm/>
-      {/*   <Timer/>
+       {/*  <StartForm/> */}
+       {/*  <Timer/>
         <Board/> */}
+        <LeaderBoard/>
+
       </div>
     )
   }
